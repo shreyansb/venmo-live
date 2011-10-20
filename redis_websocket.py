@@ -21,7 +21,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import redis
-import settings
+import venmo_live_settings
 
 
 # This is ugly but I did not want to create multiple files for a so trivial
@@ -63,7 +63,8 @@ LISTENERS = []
 def redis_listener():
     r = redis.Redis()
     sub = r.pubsub()
-    sub.subscribe([settings.CHANNEL_NAME])
+    channel_name = venmo_live_settings.CHANNEL_NAME
+    sub.subscribe([channel_name])
     for message in sub.listen():
         for element in LISTENERS:
             element.write_message(unicode(message['data']))

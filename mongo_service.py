@@ -1,6 +1,6 @@
 import redis
 import json
-import settings
+import venmo_live_settings
 import datetime
 from time import sleep
 from pymongo.connection import Connection
@@ -37,15 +37,15 @@ def main():
             else:
                 for k in signup_keys:
                     result_dict[k] = result.get(k)
-            r.publish(settings.CHANNEL_NAME, json.dumps(result_dict))
+            r.publish(venmo_live_settings.CHANNEL_NAME, json.dumps(result_dict))
 	if result_datetimes:
 	    last_datetime = max(result_datetimes)
         sleep(1)
 
 def RemoteMongoConnect():
-    connection = Connection(settings.MONGO_HOST)
-    db = connection[settings.MONGO_DB_NAME]
-    return db[settings.MONGO_COLLECTION_NAME]
+    connection = Connection(venmo_live_settings.MONGO_HOST)
+    db = connection[venmo_live_settings.MONGO_DB_NAME]
+    return db[venmo_live_settings.MONGO_COLLECTION_NAME]
 
 
 if __name__ == "__main__":
