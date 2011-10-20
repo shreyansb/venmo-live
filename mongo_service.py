@@ -9,6 +9,13 @@ def main():
     r = redis.Redis()
     mongo_pointer = RemoteMongoConnect()
     last_datetime = datetime.datetime.now()
+
+    payment_keys = ['ip_address', 'locLat', 'locLong', 
+                    'amount', 'note', 
+                    'to_username', 'from_username',
+                    'to_user_img_url', 'from_user_img_url']
+    signup_keys = ['username', 'signup_ip_address', 'profile_picture']
+
     # Grab latest timestamp, save, fetch all greater than latest, reset latest to last in list
     while True:
         spec = {
@@ -23,10 +30,14 @@ def main():
         result_datetimes = []
         for result in results:
             result_datetimes.append(result.get('event_datetime'))
-	    del result['_id']
-	    for k, v in result.iteritems():
-	        if type(v) == datetime.datetime: del result[k]
-            r.publish(settings.CHANNEL_NAME, json.dumps(result))
+        result_dict = {}
+        if result.get('cat') in ['pay', 'charge']:
+            for k in payment_keys:
+                result_dict[k] = result.get(k)
+        else:
+            for k in signup_keys:
+                result_dict[k] = result.get(k)
+        r.publish(settings.CHANNEL_NAME, json.dumps(result_dict))
 	if result_datetimes:
 	    last_datetime = max(result_datetimes)
         sleep(1)
