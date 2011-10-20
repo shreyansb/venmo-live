@@ -30,14 +30,14 @@ def main():
         result_datetimes = []
         for result in results:
             result_datetimes.append(result.get('event_datetime'))
-        result_dict = {}
-        if result.get('cat') in ['pay', 'charge']:
-            for k in payment_keys:
-                result_dict[k] = result.get(k)
-        else:
-            for k in signup_keys:
-                result_dict[k] = result.get(k)
-        r.publish(settings.CHANNEL_NAME, json.dumps(result_dict))
+            result_dict = {}
+            if result.get('cat') in ['pay', 'charge']:
+                for k in payment_keys:
+                    result_dict[k] = result.get(k)
+            else:
+                for k in signup_keys:
+                    result_dict[k] = result.get(k)
+            r.publish(settings.CHANNEL_NAME, json.dumps(result_dict))
 	if result_datetimes:
 	    last_datetime = max(result_datetimes)
         sleep(1)
