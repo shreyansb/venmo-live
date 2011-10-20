@@ -30,7 +30,7 @@ def main():
 def RemoteMongoConnect():
     connection = Connection(settings.MONGO_HOST)
     db = connection[settings.MONGO_DB_NAME]
-    return db[settings.MONGO_COLLETION_NAME]
+    return db[settings.MONGO_COLLECTION_NAME]
 
 
 if __name__ == "__main__":
