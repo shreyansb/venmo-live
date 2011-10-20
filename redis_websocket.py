@@ -69,6 +69,10 @@ def redis_listener():
         for element in LISTENERS:
             element.write_message(unicode(message['data']))
 
+class NewMsgHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(TEMPLATE)
+
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         LISTENERS.append(self)
@@ -84,6 +88,7 @@ settings = {
 }
 
 application = tornado.web.Application([
+    (r'/', NewMsgHandler),
     (r'/realtime/', RealtimeHandler),
 ], **settings)
 
