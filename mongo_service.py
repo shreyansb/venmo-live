@@ -23,8 +23,12 @@ def main():
         result_datetimes = []
         for result in results:
             result_datetimes.append(result.get('event_datetime'))
+	    del result['_id']
+	    for k, v in result.iteritems():
+	        if type(v) == datetime.datetime: del result[k]
             r.publish(settings.CHANNEL_NAME, json.dumps(result))
-        last_datetime = max(result_datetimes)
+	if result_datetimes:
+	    last_datetime = max(result_datetimes)
         sleep(1)
 
 def RemoteMongoConnect():

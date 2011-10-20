@@ -21,6 +21,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import redis
+import settings
 
 
 # This is ugly but I did not want to create multiple files for a so trivial
@@ -33,24 +34,9 @@ TEMPLATE = """
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 </head>
 <body>
-    <h1>Hello world</h1>
-    <form method='POST' action='./'>
-        <textarea name='data' id="data"></textarea>
-        <div><input type='submit'></div>
-    </form>
     <div id="log"></div>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
-            
-            $('form').submit(function(event){
-                var value = $('#data').val();
-                $.post("./", { data: value }, function(data){
-                    $("#data").val('');
-                });
-                return false;
-            });
-            
-            
             if ("WebSocket" in window) {
               var ws = new WebSocket("ws://ec2-50-16-101-124.compute-1.amazonaws.com/realtime/");
               ws.onopen = function() {};
@@ -77,21 +63,10 @@ LISTENERS = []
 def redis_listener():
     r = redis.Redis()
     sub = r.pubsub()
-    sub.subscribe(['test_realtime'])
+    sub.subscribe([settings.CHANNEL_NAME])
     for message in sub.listen():
         for element in LISTENERS:
             element.write_message(unicode(message['data']))
-
-
-class NewMsgHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write(TEMPLATE)
-
-    def post(self):
-        data = self.request.arguments['data'][0]
-        r = redis.Redis()
-        r.publish('test_realtime', data)
-        
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
@@ -103,13 +78,11 @@ class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         LISTENERS.remove(self)
 
-
 settings = {
     'auto_reload': True,
 }
 
 application = tornado.web.Application([
-    (r'/', NewMsgHandler),
     (r'/realtime/', RealtimeHandler),
 ], **settings)
 
