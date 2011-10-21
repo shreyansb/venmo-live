@@ -26,22 +26,24 @@ function new_loc_from_message(received_msg) {
 }
 
 function get_bounding_box_points() {
-    var maxLat = -90.0;
-    var minLat = 90.0;
-    var maxLong = -180.0;
-    var minLong = 180.0;
+    var locLats = [];
+    var locLongs = [];
     // loop through visible markers;
     for (i=0; i<visibleMarkers.length; i++) {
         var position = visibleMarkers[i].getPosition();
-        var locLat = position.lat();
-        var locLong = position.lng();
-        if (locLat > maxLat) { maxLat = locLat; }
-        else if (locLat < minLat) { minLat = locLat; }
-        if (locLong > maxLong) { maxLong = locLong; }
-        else if (locLong < minLong) { minLong = locLong; }
+        locLats.push(position.lat());
+        locLongs.push(position.lng());
     }
-    return {'maxLat':maxLat, 'minLat':minLat,
-            'maxLong':maxLong, 'minLong':minLong};
+    console.log(locLats);
+    console.log(locLongs);
+    var points =  {
+        'maxLat':Math.max.apply(null, locLats), 
+        'minLat':Math.min.apply(null, locLats),
+        'maxLong':Math.max.apply(null, locLongs), 
+        'minLong':Math.min.apply(null, locLongs)
+    };
+    console.log(points);
+    return points;
 }
 
 function create_marker(newLoc, locType) {
