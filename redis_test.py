@@ -29,14 +29,12 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        print "---------------"
-        print os.path.dirname(__file__)
-        print "---------------"
         self.render("test_template.html");
 
 if __name__ == "__main__":
     settings = {
-        "static_path": "/Users/muffs/venmo-other/venmo-live",
+        #"static_path": "/Users/muffs/venmo-other/venmo-live",
+        "static_path": os.path.join(os.path.dirname(__file__), "static"),
     }
     application = tornado.web.Application([
         (r"/", MainHandler),
