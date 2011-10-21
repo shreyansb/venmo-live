@@ -1,6 +1,10 @@
 var map;
 var visibleMarkers = [];
 var maxMarkers = 5;
+var signupIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
+var payIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
+var chargeIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
+var commentIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
 
 function initialize() {
     var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
@@ -40,13 +44,27 @@ function get_bounding_box_points() {
             'maxLong':maxLong, 'minLong':minLong};
 }
 
-function update_map(newLoc) {
-    map.setCenter(newLoc);
-    var marker = new google.maps.Marker({
+function create_marker(loc, locType) {
+    var markerOptions = {
         position: newLoc, 
         map: map,
         animation: google.maps.Animation.DROP
-    });
+    };
+    if (locType == 'pay') {
+        markerOptions.icon = payIcon;
+    } else if (locType == 'charge') {
+        markerOptions.icon = chargeIcon;
+    } else if (locType == 'signup_detailed') {
+        markerOptions.icon = signupIcon;
+    } else if (locType == 'comment') {
+        markerOptions.icon = commentIcon;
+    }
+    return new google.maps.Marker(markerOptions);
+}
+
+function update_map(newLoc, locType) {
+    map.setCenter(newLoc);
+    var marker = create_marker(newLoc, locType);
     if (visibleMarkers.length >= maxMarkers) {
         var removedMarker = visibleMarkers.shift();
         removedMarker.setMap(null);
@@ -70,7 +88,9 @@ function start_web_socket() {
             var received_msg = JSON.parse(evt.data);
             console.log(received_msg);
             render_template(received_msg);
-            update_map(new_loc_from_message(received_msg));
+            var loc = new_loc_from_message(received_msg);
+            var locType = received_msg.cat;
+            update_map(loc, locType);
         };
         ws.onclose = function() {};
     } else {
