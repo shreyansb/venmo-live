@@ -1,7 +1,7 @@
 var map;
 var visibleMarkers = [];
 var maxMarkers = 5;
-var signupIcon = 'static/assets/money-bag-icon.png';
+var signupIcon = 'static/assets/mario-jumping-icon.png';
 var payIcon = 'static/assets/money-bag-icon.png';
 var chargeIcon = 'static/assets/money-bag-icon.png';
 var commentIcon = 'static/assets/money-bag-icon.png';
