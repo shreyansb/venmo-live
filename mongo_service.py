@@ -10,11 +10,11 @@ def main():
     mongo_pointer = RemoteMongoConnect()
     last_datetime = datetime.datetime.now()
 
-    payment_keys = ['ip_address', 'locLat', 'locLong', 
+    payment_keys = ['user', 'ip_address', 'locLat', 'locLong', 
                     'amount', 'note', 
                     'to_username', 'from_username',
                     'to_user_img_url', 'from_user_img_url']
-    signup_keys = ['username', 'signup_ip_address', 'profile_picture']
+    signup_keys = ['user', 'signup_ipaddress', 'profile_picture']
 
     # Grab latest timestamp, save, fetch all greater than latest, reset latest to last in list
     while True:
@@ -23,7 +23,7 @@ def main():
                 "$gt": last_datetime 
             },
             "cat": {
-                "$in": ["pay","charge","signup"]
+                "$in": ["pay","charge","signup_detailed"]
             }
         }
         results = mongo_pointer.find(spec)
