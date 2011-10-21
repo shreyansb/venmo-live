@@ -8,6 +8,7 @@ For questions / feedback / coffee -> @kizlum or thomas@pelletier.im.
 Have fun.
 """
 
+import os
 import redis
 import threading
 import tornado.autoreload
@@ -44,6 +45,7 @@ class RealtimeHandler(tornado.websocket.WebSocketHandler):
 
 settings = {
     'auto_reload': True,
+    'static_path': os.path.join(os.path.dirname(__file__), "static")
 }
 
 application = tornado.web.Application([
