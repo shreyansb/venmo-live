@@ -14,6 +14,25 @@
         <div id="events">
             <img class="logo" src="{{static_url('assets/venmo-logo-medium-6.png')}}" />
             <ul>
+                <li class="public_payment shadow">
+                    <span class="date">Public Payment</span>
+                    <div class="pics clearfix">';
+                        <img height="50px" class="profile_pic shadow float_left" src="" />
+                        <img height="50px" class="profile_pic shadow float_right" src="" />
+                        <span class="note shadow float_right">'+note+'</span>
+                    </div>
+                </li>
+                <li class="private_payment">
+                    <div class="date">Payment</div>
+                    <div class="note">Private - $10</div>
+                </li>
+                <li class="public_payment shadow">
+                    <span class="date">New User</span>
+                    <div class="pics clearfix">
+                    <img height="50px" class="profile_pic shadow float_left" src="" />
+                    <span class="note shadow float_right">'+data.user+' just signed up!</span>
+                    </div>
+                </li>
             </ul>
         </div>
         <div id="map_canvas" >
