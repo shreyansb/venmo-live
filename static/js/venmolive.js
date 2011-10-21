@@ -34,15 +34,12 @@ function get_bounding_box_points() {
         locLats.push(position.lat());
         locLongs.push(position.lng());
     }
-    console.log(locLats);
-    console.log(locLongs);
     var points =  {
         'maxLat':Math.max.apply(null, locLats), 
         'minLat':Math.min.apply(null, locLats),
         'maxLong':Math.max.apply(null, locLongs), 
         'minLong':Math.min.apply(null, locLongs)
     };
-    console.log(points);
     return points;
 }
 
@@ -72,7 +69,6 @@ function update_map(newLoc, locType) {
         removedMarker.setMap(null);
     }
     visibleMarkers.push(marker);
-    console.log(visibleMarkers);
     if (visibleMarkers.length > 1) {
         var bounds = get_bounding_box_points();
         var SW = new google.maps.LatLng(bounds.minLat, bounds.minLong);
