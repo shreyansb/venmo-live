@@ -45,6 +45,7 @@ def main():
                     do_publish = False
                     break
             if do_publish:
+		print result_dict
                 r.publish(venmo_live_settings.CHANNEL_NAME, json.dumps(result_dict))
 	if result_datetimes:
 	    last_datetime = max(result_datetimes)
