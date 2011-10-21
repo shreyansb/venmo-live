@@ -116,7 +116,7 @@ function render_template(data) {
     else if (data.cat == "signup_detailed") {
         public_payment = '<li class="sign_up shadow">';
         public_payment += '<span class="date">New User</span>';
-        public_payment += '<div class="pics clearfix">';
+        public_payment += '<div class="sign_up_pic clearfix">';
         public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';
         public_payment += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
         public_payment += '</div>';
