@@ -35,7 +35,7 @@ div#map_canvas {
     border-radius: 3px;
     color: black;
     background: white;
-    width: 100%;
+    width: 85%;
     height: 100%;
     margin-left: 295px;
 }
@@ -49,6 +49,15 @@ div#events img.logo {
 div#events ul li+li {
     margin-top: 10px;
 }
+li.public_payment {
+    padding: 0px 10px 5px 10px;
+}
+li.private_payment {
+    padding: 5px 0 9px 10px;
+}
+li.private_payment .date {
+    margin-bottom: 10px;
+}
 div#events ul li {
     border: 1px solid #242424;
     background: #23303E;
@@ -57,7 +66,6 @@ div#events ul li {
     background: url("http://i.imgur.com/rxmdz.png") repeat, -moz-linear-gradient(center top, #2c2c2c 0%, #353535 100%);
     background: url("http://i.imgur.com/rxmdz.png") repeat, -moz-gradient(center top, #2c2c2c 0%, #353535 100%);
     border-radius: 3px;
-    padding: 0px 10px 5px 10px;
 }
 div#events .date {
     font-size: 11px;
@@ -71,6 +79,10 @@ li.public_payment .note {
 }
 li.private_payment .note{
     width: 280px;
+    margin-left: 10px;
+}
+li.sign_up .note {
+    width: 160px;
 }
 
 .note {

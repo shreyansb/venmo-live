@@ -116,14 +116,14 @@ function render_template(data) {
         else {
             /* Private Payment */
             var public_payment = '<li class="private_payment">';
-            public_payment += '<div class="date">Payment</div>';
-            public_payment += '<div class="note">Private - $'+data.amount+'</div>';
+            public_payment += '<span class="date">Payment</span>';
+            public_payment += '<span class="note">Private - $'+data.amount+'</span>';
             public_payment += '</li>';
             $("#events ul").prepend($(public_payment));
         }
     }
     else if (data.cat == "signup") {
-        var public_payment = '<li class="public_payment shadow">';
+        var public_payment = '<li class="sign_up shadow">';
         public_payment += '<span class="date">New User</span>';
         public_payment += '<div class="pics clearfix">';
         public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';

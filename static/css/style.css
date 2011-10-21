@@ -42,6 +42,7 @@ div#map_canvas {
     color: black;
     margin-left: 295px;
     min-height: 570px;
+    width: 80%;
     padding: 36px 60px;
 }
 div#events img {
@@ -69,6 +70,10 @@ div#events .date {
 
 li.public_payment .note {
     margin: 0px 5px 5px 5px;
+}
+li.sign_up .note {
+    margin: 0px 5px 5px 5px;
+    width: 160px;
 }
 .note {
     width: 110px;
