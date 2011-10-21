@@ -3,9 +3,9 @@ var visibleLocations = [];
 var maxLocations = 5;
 
 function initialize() {
-    var latlng = new google.maps.LatLng(43.03, -75.38);
+    var latlng = new google.maps.LatLng(40.7457, -73.9935);
     var options = {
-        zoom: 8,
+        zoom: 12,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     };
@@ -33,6 +33,7 @@ function get_bounding_box_points() {
 function update_map(received_msg) {
     var newLat = received_msg.locLat;
     var newLong = received_msg.locLong;
+    if (!newLat || !newLong) { return; }
     var newLoc = new google.maps.LatLng(newLat,newLong);
     map.setCenter(newLoc);
     var marker = new google.maps.Marker({

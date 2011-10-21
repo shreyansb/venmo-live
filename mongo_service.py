@@ -10,11 +10,13 @@ def main():
     mongo_pointer = RemoteMongoConnect()
     last_datetime = datetime.datetime.now()
 
-    payment_keys = ['user', 'ip_address', 'locLat', 'locLong', 
+    payment_keys = ['cat', 'user', 'ip_address', 'locLat', 'locLong', 
                     'amount', 'note', 
                     'to_username', 'from_username',
                     'to_user_img_url', 'from_user_img_url']
-    signup_keys = ['user', 'signup_ipaddress', 'profile_picture']
+    signup_keys = ['cat', 'user', 'signup_ipaddress', 'profile_picture',
+                   'locLat', 'locLong']
+    required_keys = ['locLat', 'locLong']
 
     # Grab latest timestamp, save, fetch all greater than latest, reset latest to last in list
     while True:
@@ -37,7 +39,13 @@ def main():
             else:
                 for k in signup_keys:
                     result_dict[k] = result.get(k)
-            r.publish(venmo_live_settings.CHANNEL_NAME, json.dumps(result_dict))
+            do_publish = True
+            for k in required_keys:
+                if not result_dict.get(k):
+                    do_publish = False
+                    break
+            if do_publish:
+                r.publish(venmo_live_settings.CHANNEL_NAME, json.dumps(result_dict))
 	if result_datetimes:
 	    last_datetime = max(result_datetimes)
         sleep(1)
