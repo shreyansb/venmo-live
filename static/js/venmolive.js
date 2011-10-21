@@ -3,9 +3,9 @@ var visibleLocations = [];
 var maxLocations = 5;
 
 function initialize() {
-    var latlng = new google.maps.LatLng(43.03, -75.38);
+    var latlng = new google.maps.LatLng(40.7457, -73.9935);
     var options = {
-        zoom: 8,
+        zoom: 12,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     };
