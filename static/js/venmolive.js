@@ -75,7 +75,7 @@ function start_web_socket() {
 }
 
 function render_template(data) {
-    if ("note" in data){
+    if ("note" in data && data.note != undefined){
         var from_profile_pic = data.from_user_img_url;
         var to_profile_pic = data.to_user_img_url;
         var note = data.note;
