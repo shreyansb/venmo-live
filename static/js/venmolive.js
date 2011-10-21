@@ -1,6 +1,6 @@
 var map;
-var visibleLocations = [];
-var maxLocations = 5;
+var visibleMarkers = [];
+var maxMarkers = 5;
 
 function initialize() {
     var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
@@ -13,45 +13,47 @@ function initialize() {
         options);
 }
 
+function new_loc_from_message(received_msg) {
+    var newLat = received_msg.locLat;
+    var newLong = received_msg.locLong;
+    if (!newLat || !newLong) { return; }
+    var newLoc = new google.maps.LatLng(newLat,newLong);
+    return newLoc;
+}
+
 function get_bounding_box_points() {
     var maxLat = -90.0;
     var minLat = 90.0;
     var maxLong = -180.0;
     var minLong = 180.0;
     // loop through visible markers;
-    for (i=0; i<visibleLocations.length; i++) {
-        var locLat = visibleLocations[i].locLat;
-        var locLong = visibleLocations[i].locLong;
+    for (i=0; i<visibleMarkers.length; i++) {
+        var position = visibleMarkers[i].getPosition();
+        var locLat = position.lat();
+        var locLong = position.lng();
         if (locLat > maxLat) { maxLat = locLat; }
         else if (locLat < minLat) { minLat = locLat; }
         if (locLong > maxLong) { maxLong = locLong; }
         else if (locLong < minLong) { minLong = locLong; }
     }
-    return {'maxLat':maxLat, 'minLat':minLat, 'maxLong':maxLong, 'minLong':minLong} ;
+    return {'maxLat':maxLat, 'minLat':minLat,
+            'maxLong':maxLong, 'minLong':minLong};
 }
 
-function update_map(received_msg) {
-    var newLat = received_msg.locLat;
-    var newLong = received_msg.locLong;
-    if (!newLat || !newLong) { return; }
-    var newLoc = new google.maps.LatLng(newLat,newLong);
+function update_map(newLoc) {
     map.setCenter(newLoc);
     var marker = new google.maps.Marker({
         position: newLoc, 
         map: map,
         animation: google.maps.Animation.DROP
     });
-    newLocDict = {
-        'locLat':newLat,
-        'locLong':newLong
-    };
-    if (visibleLocations.length >= maxLocations) {
-        visibleLocations.shift();
+    if (visibleMarkers.length >= maxMarkers) {
+        var removedMarker = visibleMarkers.shift();
+        removedMarker.setMap(null);
     }
-    visibleLocations.push(newLocDict);
-    console.log(received_msg);
-    console.log(visibleLocations);
-    if (visibleLocations.length > 1) {
+    visibleMarkers.push(marker);
+    console.log(visibleMarkers);
+    if (visibleMarkers.length > 1) {
         var bounds = get_bounding_box_points();
         var SW = new google.maps.LatLng(bounds.minLat, bounds.minLong);
         var NE = new google.maps.LatLng(bounds.maxLat, bounds.maxLong);
@@ -66,8 +68,9 @@ function start_web_socket() {
         ws.onopen = function() {};
         ws.onmessage = function(evt) {
             var received_msg = JSON.parse(evt.data);
+            console.log(received_msg);
             render_template(received_msg);
-            update_map(received_msg);
+            update_map(new_loc_from_message(received_msg));
         };
         ws.onclose = function() {};
     } else {
