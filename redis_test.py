@@ -29,7 +29,7 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/venmolive.html");
+        self.render("templates/venmolive_new.html");
 
 if __name__ == "__main__":
     settings = {

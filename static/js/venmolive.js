@@ -101,23 +101,38 @@ function start_web_socket() {
 }
 
 function render_template(data) {
-    if ("note" in data && data.note != undefined){
-        var from_profile_pic = data.from_user_img_url;
-        var to_profile_pic = data.to_user_img_url;
-        var note = data.note;
-        var public_payment = '<li class="public_payment shadow">';
-        public_payment += '<span class="date">Public Payment</span>';
-        public_payment += '<div class="pics clearfix">';
-        public_payment += '<img class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
-        public_payment += '<img class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
-        public_payment += '<span class="note shadow float_right">'+note+'</span>';
-        public_payment += '</div>';
-        public_payment += '</li>';
-        $("#events ul").prepend($(public_payment));
+    if ( data.cat == "pay" || data.cat == "charge" ){
+        if ("note" in data && data.note != undefined) {
+            /* Public Payment */
+            var from_profile_pic = data.from_user_img_url;
+            var to_profile_pic = data.to_user_img_url;
+            var note = data.note;
+            var public_payment = '<li class="public_payment shadow">';
+            public_payment += '<span class="date">Public Payment</span>';
+            public_payment += '<div class="pics clearfix">';
+            public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
+            public_payment += '<img height="50px" class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
+            public_payment += '<span class="note shadow float_right">'+note+'</span>';
+            public_payment += '</div>';
+            public_payment += '</li>';
+            $("#events ul").prepend($(public_payment));
+        }
+        else {
+            /* Private Payment */
+            var public_payment = '<li class="private_payment">';
+            public_payment += '<div class="date">Payment</div>';
+            public_payment += '<div class="note">Private - $'+data.amount+'</div>';
+            public_payment += '</li>';
+            $("#events ul").prepend($(public_payment));
+        }
     }
-    else {
-        var public_payment = '<li class="private_payment">';
-        public_payment += '<span class="note">Private Payment - $'+data.amount+'</span>';
+    else if (data.cat == "signup") {
+        var public_payment = '<li class="public_payment shadow">';
+        public_payment += '<span class="date">New User</span>';
+        public_payment += '<div class="pics clearfix">';
+        public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';
+        public_payment += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
+        public_payment += '</div>';
         public_payment += '</li>';
         $("#events ul").prepend($(public_payment));
     }
