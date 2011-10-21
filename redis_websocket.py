@@ -31,7 +31,7 @@ def redis_listener():
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/venmolive_test.html")
+        self.render("templates/venmolive_new.html")
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
