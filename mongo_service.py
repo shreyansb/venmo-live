@@ -10,11 +10,14 @@ def main():
     mongo_pointer = RemoteMongoConnect()
     last_datetime = datetime.datetime.now()
 
-    payment_keys = ['cat', 'user', 'ip_address', 'locLat', 'locLong', 
+    events_to_find = ['pay', 'charge', 'signup_detailed']
+    payment_keys = ['user', 'ip_address', 'locLat', 'locLong', 
                     'amount', 'note', 
                     'to_username', 'from_username',
                     'to_user_img_url', 'from_user_img_url']
-    signup_keys = ['cat', 'user', 'signup_ipaddress', 'profile_picture',
+    signup_keys = ['user', 'signup_ipaddress', 'profile_picture',
+                   'locLat', 'locLong']
+    comment_keys = ['user', 'signup_ipaddress', 'profile_picture',
                    'locLat', 'locLong']
     required_keys = ['locLat', 'locLong']
 
@@ -25,20 +28,23 @@ def main():
                 "$gt": last_datetime 
             },
             "cat": {
-                "$in": ["pay","charge","signup_detailed"]
+                "$in": events_to_find
             }
         }
         results = mongo_pointer.find(spec)
         result_datetimes = []
         for result in results:
             result_datetimes.append(result.get('event_datetime'))
-            result_dict = {}
-            if result.get('cat') in ['pay', 'charge']:
-                for k in payment_keys:
-                    result_dict[k] = result.get(k)
+            category = result.get('cat')
+            result_dict = {'cat':category}
+            if category in ['pay', 'charge']:
+                keys_to_add = payment_keys
+            elif category == 'comment':
+                keys_to_add = comment_keys
             else:
-                for k in signup_keys:
-                    result_dict[k] = result.get(k)
+                keys_to_add = signup_keys
+            for k in keys_to_add:
+                result_dict[k] = result.get(k)
             do_publish = True
             for k in required_keys:
                 if not result_dict.get(k):
