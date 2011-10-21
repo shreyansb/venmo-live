@@ -6,7 +6,16 @@ var payIcon = 'static/assets/money-bag-icon.png';
 var chargeIcon = 'static/assets/money-bag-icon.png';
 var commentIcon = 'static/assets/money-bag-icon.png';
 
+function set_map_dimensions() {
+    var h = window.innerHeight;
+    var w = window.innerWidth;
+    var map_canvas = document.getElementById('map_canvas');
+    map_canvas.style.height = window.innerHeight;
+    map_canvas.style.width = window.innerWidth - 290;
+}
+
 function initialize() {
+    set_map_dimensions();
     var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
     var options = {
         zoom: 12,
@@ -78,6 +87,45 @@ function update_map(newLoc, locType) {
     }
 }
 
+function render_template(data) {
+    var public_payment;
+    if ( data.cat == "pay" || data.cat == "charge" ){
+        if ("note" in data && data.note !== undefined) {
+            /* Public Payment */
+            var from_profile_pic = data.from_user_img_url;
+            var to_profile_pic = data.to_user_img_url;
+            var note = data.note;
+            public_payment = '<li class="public_payment shadow">';
+            public_payment += '<span class="date">'+data.cat+'</span>';
+            public_payment += '<div class="pics clearfix">';
+            public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
+            public_payment += '<img height="50px" class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
+            public_payment += '<span class="note shadow float_right">'+note+'</span>';
+            public_payment += '</div>';
+            public_payment += '</li>';
+            $("#events ul").prepend($(public_payment));
+        }
+        else {
+            /* Private Payment */
+            public_payment = '<li class="private_payment">';
+            public_payment += '<span class="date">Payment</span>';
+            public_payment += '<span class="note">Private - $'+data.amount+'</span>';
+            public_payment += '</li>';
+            $("#events ul").prepend($(public_payment));
+        }
+    }
+    else if (data.cat == "signup_detailed") {
+        public_payment = '<li class="sign_up shadow">';
+        public_payment += '<span class="date">New User</span>';
+        public_payment += '<div class="pics clearfix">';
+        public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';
+        public_payment += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
+        public_payment += '</div>';
+        public_payment += '</li>';
+        $("#events ul").prepend($(public_payment));
+    }
+}
+
 function start_web_socket() {
     if ("WebSocket" in window) {
         var ws = new WebSocket("ws://50.16.101.124/realtime/");
@@ -93,43 +141,5 @@ function start_web_socket() {
         ws.onclose = function() {};
     } else {
         alert("no websockets, sorry!");
-    }
-}
-
-function render_template(data) {
-    if ( data.cat == "pay" || data.cat == "charge" ){
-        if ("note" in data && data.note != undefined) {
-            /* Public Payment */
-            var from_profile_pic = data.from_user_img_url;
-            var to_profile_pic = data.to_user_img_url;
-            var note = data.note;
-            var public_payment = '<li class="public_payment shadow">';
-            public_payment += '<span class="date">'+data.cat+'</span>';
-            public_payment += '<div class="pics clearfix">';
-            public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
-            public_payment += '<img height="50px" class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
-            public_payment += '<span class="note shadow float_right">'+note+'</span>';
-            public_payment += '</div>';
-            public_payment += '</li>';
-            $("#events ul").prepend($(public_payment));
-        }
-        else {
-            /* Private Payment */
-            var public_payment = '<li class="private_payment">';
-            public_payment += '<span class="date">Payment</span>';
-            public_payment += '<span class="note">Private - $'+data.amount+'</span>';
-            public_payment += '</li>';
-            $("#events ul").prepend($(public_payment));
-        }
-    }
-    else if (data.cat == "signup_detailed") {
-        var public_payment = '<li class="sign_up shadow">';
-        public_payment += '<span class="date">New User</span>';
-        public_payment += '<div class="pics clearfix">';
-        public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';
-        public_payment += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
-        public_payment += '</div>';
-        public_payment += '</li>';
-        $("#events ul").prepend($(public_payment));
     }
 }

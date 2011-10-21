@@ -7,6 +7,14 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="{{static_url('js/jquery-1.6.4.js')}}"></script>
     <script type="text/javascript" src="{{static_url('js/venmolive.js')}}"></script>
+    <script type="text/javascript">
+        /* Resize map on window size change. */
+        $(function(){
+            $(window).resize(function() {
+                set_map_dimensions();
+            });
+        });
+    </script>
 </head>
 <body onload="initialize(); start_web_socket();">
     <div id="background"></div>
