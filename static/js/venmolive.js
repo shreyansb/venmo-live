@@ -3,10 +3,10 @@ var visibleLocations = [];
 var maxLocations = 5;
 
 function initialize() {
-    var latlng = new google.maps.LatLng(40.7457, -73.9935);
+    var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
     var options = {
         zoom: 12,
-        center: latlng,
+        center: venmoOffice,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     };
     map = new google.maps.Map(document.getElementById("map_canvas"),
@@ -38,7 +38,8 @@ function update_map(received_msg) {
     map.setCenter(newLoc);
     var marker = new google.maps.Marker({
         position: newLoc, 
-        map: map
+        map: map,
+        animation: google.maps.Animation.DROP
     });
     newLocDict = {
         'locLat':newLat,
