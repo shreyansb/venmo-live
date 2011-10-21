@@ -7,8 +7,6 @@ var chargeIcon = 'static/assets/money-bag-icon.png';
 var commentIcon = 'static/assets/money-bag-icon.png';
 
 function set_map_dimensions() {
-    var h = window.innerHeight;
-    var w = window.innerWidth;
     var map_canvas = document.getElementById('map_canvas');
     map_canvas.style.height = window.innerHeight;
     map_canvas.style.width = window.innerWidth - 290;
@@ -89,8 +87,9 @@ function update_map(newLoc, locType) {
 
 function render_template(data) {
     var public_payment;
+    console.log(data);
     if ( data.cat == "pay" || data.cat == "charge" ){
-        if ("note" in data && data.note !== undefined) {
+        if ("note" in data && data.note != undefined) {
             /* Public Payment */
             var from_profile_pic = data.from_user_img_url;
             var to_profile_pic = data.to_user_img_url;
