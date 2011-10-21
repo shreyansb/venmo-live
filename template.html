@@ -1,0 +1,35 @@
+<!DOCTYPE>
+<html>
+<head>
+    <title>Sample test</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <link href='style.css' rel='stylesheet' type='text/css' />
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            if ("WebSocket" in window) {
+              var ws = new WebSocket("ws://ec2-50-16-101-124.compute-1.amazonaws.com/realtime/");
+              ws.onopen = function() {};
+              ws.onmessage = function (evt) {
+                  var received_msg = evt.data;
+                  var html = $("#log").html();
+                  html += "<p>"+received_msg+"</p>";
+                  $("#log").html(html);
+              };
+              ws.onclose = function() {};
+            } else {
+              alert("WebSocket not supported");
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="notifications">
+        <div class="wrapper">
+        </div>
+    </div>
+    <div id="map">
+        <div class="wrapper">
+        </div>
+    </div>
+</body>
+</html>

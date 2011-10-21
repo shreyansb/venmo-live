@@ -16,6 +16,7 @@ For questions / feedback / coffee -> @kizlum or thomas@pelletier.im.
 Have fun.
 """
 import threading
+import tornado.autoreload
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
@@ -71,7 +72,7 @@ def redis_listener():
 
 class NewMsgHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write(TEMPLATE)
+        self.render("test_template.html")
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
@@ -97,4 +98,5 @@ if __name__ == "__main__":
     threading.Thread(target=redis_listener).start()
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(80)
+    tornado.autoreload.start()
     tornado.ioloop.IOLoop.instance().start()
