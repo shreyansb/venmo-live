@@ -104,7 +104,7 @@ function render_template(data) {
             var to_profile_pic = data.to_user_img_url;
             var note = data.note;
             var public_payment = '<li class="public_payment shadow">';
-            public_payment += '<span class="date">Public Payment</span>';
+            public_payment += '<span class="date">'+data.cat+'</span>';
             public_payment += '<div class="pics clearfix">';
             public_payment += '<img height="50px" class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
             public_payment += '<img height="50px" class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
@@ -122,7 +122,7 @@ function render_template(data) {
             $("#events ul").prepend($(public_payment));
         }
     }
-    else if (data.cat == "signup") {
+    else if (data.cat == "signup_detailed") {
         var public_payment = '<li class="sign_up shadow">';
         public_payment += '<span class="date">New User</span>';
         public_payment += '<div class="pics clearfix">';
