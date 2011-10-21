@@ -10,11 +10,11 @@ def main():
     mongo_pointer = RemoteMongoConnect()
     last_datetime = datetime.datetime.now()
 
-    payment_keys = ['user', 'ip_address', 'locLat', 'locLong', 
+    payment_keys = ['cat', 'user', 'ip_address', 'locLat', 'locLong', 
                     'amount', 'note', 
                     'to_username', 'from_username',
                     'to_user_img_url', 'from_user_img_url']
-    signup_keys = ['user', 'signup_ipaddress', 'profile_picture',
+    signup_keys = ['cat', 'user', 'signup_ipaddress', 'profile_picture',
                    'locLat', 'locLong']
     required_keys = ['locLat', 'locLong']
 
