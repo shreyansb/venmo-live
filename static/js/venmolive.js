@@ -33,6 +33,7 @@ function get_bounding_box_points() {
 function update_map(received_msg) {
     var newLat = received_msg.locLat;
     var newLong = received_msg.locLong;
+    if (!newLat || !newLong) { return; }
     var newLoc = new google.maps.LatLng(newLat,newLong);
     map.setCenter(newLoc);
     var marker = new google.maps.Marker({
