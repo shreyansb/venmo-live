@@ -1,10 +1,10 @@
 var map;
 var visibleMarkers = [];
 var maxMarkers = 5;
-var signupIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
-var payIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
-var chargeIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
-var commentIcon = 'https://s3.amazonaws.com/venmo/venmolive/money-bag-icon.png';
+var signupIcon = 'static/assets/money-bag-icon.png';
+var payIcon = 'static/assets/money-bag-icon.png';
+var chargeIcon = 'static/assets/money-bag-icon.png';
+var commentIcon = 'static/assets/money-bag-icon.png';
 
 function initialize() {
     var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
@@ -44,7 +44,7 @@ function get_bounding_box_points() {
             'maxLong':maxLong, 'minLong':minLong};
 }
 
-function create_marker(loc, locType) {
+function create_marker(newLoc, locType) {
     var markerOptions = {
         position: newLoc, 
         map: map,
@@ -88,9 +88,9 @@ function start_web_socket() {
             var received_msg = JSON.parse(evt.data);
             console.log(received_msg);
             render_template(received_msg);
-            var loc = new_loc_from_message(received_msg);
+            var newLoc = new_loc_from_message(received_msg);
             var locType = received_msg.cat;
-            update_map(loc, locType);
+            update_map(newLoc, locType);
         };
         ws.onclose = function() {};
     } else {
