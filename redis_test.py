@@ -29,7 +29,7 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("map_template2.html");
+        self.render("test_template.html");
 
 if __name__ == "__main__":
     settings = {
