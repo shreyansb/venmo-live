@@ -50,6 +50,12 @@ div#events img.logo {
 div#events ul li+li {
     margin-top: 10px;
 }
+
+div#infowindow {
+    overflow:hidden;
+    height:auto;
+}
+
 li.public_payment {
     padding: 0px 10px 5px 10px;
 }
