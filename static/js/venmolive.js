@@ -7,14 +7,17 @@ var payIcon = 'static/assets/money-bag-icon.png';
 var chargeIcon = 'static/assets/money-bag-icon.png';
 var commentIcon = 'static/assets/money-bag-icon.png';
 
-function set_map_dimensions() {
+
+function set_page_and_map_dimensions() {
+    var events = document.getElementById('events');
+    events.style.height = window.innerHeight;
     var map_canvas = document.getElementById('map_canvas');
     map_canvas.style.height = window.innerHeight;
-    map_canvas.style.width = window.innerWidth - 290;
+    map_canvas.style.width = window.innerWidth - 295;
 }
 
-function initialize() {
-    set_map_dimensions();
+function render_map() {
+    set_page_and_map_dimensions();
     var venmoOffice = new google.maps.LatLng(40.7457, -73.9935);
     var options = {
         zoom: 12,
@@ -206,4 +209,13 @@ function start_web_socket() {
     } else {
         alert("no websockets, sorry!");
     }
+}
+
+function do_it_live() {
+    render_map();
+    start_web_socket();
+}
+
+window.resize = function() {
+    set_page_and_map_dimensions();
 }

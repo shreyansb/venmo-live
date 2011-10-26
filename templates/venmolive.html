@@ -11,12 +11,12 @@
         /* Resize map on window size change. */
         $(function(){
             $(window).resize(function() {
-                set_map_dimensions();
+                set_page_and_map_dimensions();
             });
         });
     </script>
 </head>
-<body onload="initialize(); start_web_socket();">
+<body onload="do_it_live();">
     <div id="background"></div>
     <div id="content">
         <div id="events">
