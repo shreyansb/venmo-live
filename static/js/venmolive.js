@@ -216,6 +216,6 @@ function do_it_live() {
     start_web_socket();
 }
 
-window.resize = function() {
+window.onresize = function() {
     set_page_and_map_dimensions();
-}
+};
