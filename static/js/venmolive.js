@@ -22,7 +22,7 @@ function render_map() {
     var options = {
         zoom: 12,
         center: venmoOffice,
-        mapTypeId: google.maps.MapTypeId.SATELLITE
+        mapTypeId: google.maps.MapTypeId.TERRAIN
     };
     map = new google.maps.Map(document.getElementById("map_canvas"),
         options);
