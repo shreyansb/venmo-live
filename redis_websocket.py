@@ -32,7 +32,8 @@ def redis_listener():
 
 class BaseHandler(tornado.web.RequestHandler):
     def prepare(self):
-        self.settings['static_url_prefix'] = '/live/static/'
+        pass
+        #self.settings['static_url_prefix'] = '/live/static/'
 
 class MainHandler(BaseHandler):
     def get(self):
@@ -59,7 +60,6 @@ settings = {
 application = tornado.web.Application([
     (r'/', MainHandler),
     (r'/realtime/', RealtimeHandler),
-    (r"/static/(.*)", tornado.web.StaticFileHandler, {"path":settings.get('static_path')}),   
 ], **settings)
 
 
