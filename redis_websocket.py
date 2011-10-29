@@ -63,15 +63,11 @@ class MainHandler(BaseHandler):
     def get(self):
         if self.authenticate_user():
             self.render("templates/venmolive.html")
-        else:
-            return self.finish()
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         if self.authenticate_user():
             LISTENERS.append(self)
-        else:
-            return self.finish()
 
     def on_message(self, message):
         pass
