@@ -30,7 +30,11 @@ def redis_listener():
         for element in LISTENERS:
             element.write_message(unicode(message['data']))
 
-class MainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def prepare(self):
+        self.settings['static_url_prefix'] = '/live/static/'
+
+class MainHandler(BaseHandler):
     def get(self):
         self.render("templates/venmolive.html")
 
