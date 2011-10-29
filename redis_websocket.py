@@ -66,6 +66,6 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     threading.Thread(target=redis_listener).start()
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(9700)
+    http_server.listen(80)
     tornado.autoreload.start()
     tornado.ioloop.IOLoop.instance().start()
