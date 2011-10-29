@@ -46,6 +46,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.clear_cookie('session_email')
             self.write('Sorry, you do not have access to this page')
             return False
+        return True
 
     def is_session_email_authorized(self, email):
         allowed_email_regex = getattr(venmo_live_settings, 
