@@ -2,3 +2,4 @@ django_settings.py
 venmo_live_settings.py
 *.pyc
 .DS_STORE
+build
