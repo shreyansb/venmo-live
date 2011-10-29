@@ -54,7 +54,9 @@ settings = {
 
 application = tornado.web.Application([
     (r'/live', MainHandler),
+    (r'/live/', MainHandler),
     (r'/live/realtime/', RealtimeHandler),
+    (r"/live/static/(.*)", tornado.web.StaticFileHandler, {"path":settings.get('static_path')}),   
 ], **settings)
 
 
