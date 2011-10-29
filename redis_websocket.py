@@ -43,6 +43,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.redirect('/auth/')
             return False
         if not self.is_session_email_authorized(session_email):
+            self.clear_cookie('session_email')
             self.write('Sorry, you do not have access to this page')
             return False
 
