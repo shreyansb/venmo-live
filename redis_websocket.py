@@ -40,9 +40,11 @@ class BaseHandler(tornado.web.RequestHandler):
     def authenticate_user(self):
         session_email = self.get_secure_cookie('session_email')
         if not session_email:
-            return self.redirect('/auth/')
+            self.redirect('/auth/')
+            return False
         if not self.is_session_email_authorized(session_email):
-            return self.write('Sorry, you do not have access to this page')
+            self.write('Sorry, you do not have access to this page')
+            return False
 
     def is_session_email_authorized(self, email):
         allowed_email_regex = getattr(venmo_live_settings, 
@@ -58,19 +60,26 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        self.authenticate_user()
-        self.render("templates/venmolive.html")
+        if self.authenticate_user():
+            self.render("templates/venmolive.html")
+        else:
+            return self.finish()
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        self.authenticate_user()
-        LISTENERS.append(self)
+        if self.authenticate_user():
+            LISTENERS.append(self)
+        else:
+            return self.finish()
 
     def on_message(self, message):
         pass
 
     def on_close(self):
-        LISTENERS.remove(self)
+        try:
+            LISTENERS.remove(self)
+        except ValueError:
+            pass
 
 class AuthHandler(BaseHandler, tornado.auth.GoogleMixin):
     @tornado.web.asynchronous
