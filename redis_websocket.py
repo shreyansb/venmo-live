@@ -10,6 +10,7 @@ Have fun.
 
 import os
 import logging
+import re
 import redis
 import threading
 import tornado.autoreload
@@ -34,16 +35,34 @@ class BaseHandler(tornado.web.RequestHandler):
     def prepare(self):
         pass
         #self.settings['static_url_prefix'] = '/live/static/'
+    
+    def authenticate_user(self):
+        session_email = self.get_secure_cookie('session_email')
+        if not session_email:
+            return self.redirect('/auth')
+        if not self.is_session_email_authorized(session_email):
+            return self.write('Sorry, you do not have access to this page')
+
+    def is_session_email_authorized(self, email):
+        allowed_email_regex = getattr(venmo_live_settings, 
+                                      'ALLOWED_EMAIL_REGEX',
+                                      None)
+        if allowed_email_regex:
+            if re.match(allowed_email_regex, email):
+                return True
+        if hasattr(venmo_live_settings, 'ALLOWED_EMAILS'):
+            if email in venmo_live_settings.ALLOWED_EMAILS:
+                return True
+        return False
 
 class MainHandler(BaseHandler):
     def get(self):
+        self.authenticate_user()
         self.render("templates/venmolive.html")
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        # check to see if the websocket is authenticated
-        logging.info(self)
-        logging.info(self.get_cookie('sessionid'))
+        self.authenticate_user()
         LISTENERS.append(self)
 
     def on_message(self, message):
@@ -52,14 +71,31 @@ class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         LISTENERS.remove(self)
 
+class AuthHandler(BaseHandler, tornado.auth.GoogleMixin):
+    @tornado.web.asynchronous
+    def get(self):
+        if self.get_argument("openid.mode", None):
+            self.get_authenticated_user(self.async_callback(self._on_auth))
+            return
+        self.authenticate_redirect()
+
+    def _on_auth(self, user):
+        if not user:
+            raise tornado.web.HTTPError(500, "Google auth failed")
+        # Save the authenticated user's details in a secure cookie
+        self.set_secure_cookie('session_email', user.get('email'))
+        self.redirect('/')
+
 settings = {
     'auto_reload': True,
-    'static_path': os.path.join(os.path.dirname(__file__), "static")
+    'static_path': os.path.join(os.path.dirname(__file__), "static"),
+    'cookie_secret': venmo_live_settings.COOKIE_SECRET
 }
 
 application = tornado.web.Application([
     (r'/', MainHandler),
     (r'/realtime/', RealtimeHandler),
+    (r'/auth/', AuthHandler),
 ], **settings)
 
 
