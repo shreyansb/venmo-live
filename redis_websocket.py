@@ -13,6 +13,7 @@ import logging
 import re
 import redis
 import threading
+import tornado.auth
 import tornado.autoreload
 import tornado.httpserver
 import tornado.websocket
@@ -39,7 +40,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def authenticate_user(self):
         session_email = self.get_secure_cookie('session_email')
         if not session_email:
-            return self.redirect('/auth')
+            return self.redirect('/auth/')
         if not self.is_session_email_authorized(session_email):
             return self.write('Sorry, you do not have access to this page')
 
