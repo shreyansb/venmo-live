@@ -32,11 +32,8 @@ def redis_listener():
         for element in LISTENERS:
             element.write_message(unicode(message['data']))
 
-class BaseHandler(tornado.web.RequestHandler):
-    def prepare(self):
-        pass
-        #self.settings['static_url_prefix'] = '/live/static/'
-    
+
+class AuthMixin():
     def authenticate_user(self):
         session_email = self.get_secure_cookie('session_email')
         if not session_email:
@@ -60,12 +57,20 @@ class BaseHandler(tornado.web.RequestHandler):
                 return True
         return False
 
-class MainHandler(BaseHandler):
+
+class BaseHandler(tornado.web.RequestHandler):
+    def prepare(self):
+        pass
+        #self.settings['static_url_prefix'] = '/live/static/'
+
+
+class MainHandler(BaseHandler, AuthMixin):
     def get(self):
         if self.authenticate_user():
             self.render("templates/venmolive.html")
 
-class RealtimeHandler(tornado.websocket.WebSocketHandler):
+
+class RealtimeHandler(tornado.websocket.WebSocketHandler, AuthMixin):
     def open(self):
         if self.authenticate_user():
             LISTENERS.append(self)
@@ -78,6 +83,7 @@ class RealtimeHandler(tornado.websocket.WebSocketHandler):
             LISTENERS.remove(self)
         except ValueError:
             pass
+
 
 class AuthHandler(BaseHandler, tornado.auth.GoogleMixin):
     @tornado.web.asynchronous
@@ -93,6 +99,7 @@ class AuthHandler(BaseHandler, tornado.auth.GoogleMixin):
         # Save the authenticated user's details in a secure cookie
         self.set_secure_cookie('session_email', user.get('email'))
         self.redirect('/')
+
 
 settings = {
     'auto_reload': True,
