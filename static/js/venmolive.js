@@ -195,7 +195,7 @@ function render_template(data, return_html_for_info_window) {
 
 function start_web_socket() {
     if ("WebSocket" in window) {
-        var ws = new WebSocket("ws://50.16.101.124/realtime/");
+        var ws = new WebSocket("ws://107.20.240.170/realtime/");
         ws.onopen = function() {};
         ws.onmessage = function(evt) {
             var received_msg = JSON.parse(evt.data);
