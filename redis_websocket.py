@@ -53,14 +53,14 @@ settings = {
 }
 
 application = tornado.web.Application([
-    (r'/', MainHandler),
-    (r'/realtime/', RealtimeHandler),
+    (r'/live', MainHandler),
+    (r'/live/realtime/', RealtimeHandler),
 ], **settings)
 
 
 if __name__ == "__main__":
     threading.Thread(target=redis_listener).start()
     http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(80)
+    http_server.listen(9700)
     tornado.autoreload.start()
     tornado.ioloop.IOLoop.instance().start()
