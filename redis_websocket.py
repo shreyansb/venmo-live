@@ -9,6 +9,7 @@ Have fun.
 """
 
 import os
+import logging
 import redis
 import threading
 import tornado.autoreload
@@ -35,6 +36,9 @@ class MainHandler(tornado.web.RequestHandler):
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
+        # check to see if the websocket is authenticated
+        logging.info(self)
+        logging.info(self.get_cookie('sessionid'))
         LISTENERS.append(self)
 
     def on_message(self, message):
