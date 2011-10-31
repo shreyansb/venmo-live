@@ -59,13 +59,19 @@ div#infowindow {
 li.public_payment {
     padding: 0px 10px 5px 10px;
 }
+div#map_canvas ul li.public_payment {
+    padding: 10px 9px;
+}
 li.private_payment {
     padding: 5px 0 9px 10px;
+}
+div#map_canvas ul li.private_payment{
+
 }
 li.private_payment .date {
     margin-bottom: 10px;
 }
-div#events ul li {
+div#events ul li, div#map_canvas ul li {
     border: 1px solid #242424;
     background: #23303E;
     background: url("http://i.imgur.com/rxmdz.png") repeat, -webkit-gradient(linear, left top, left bottom, from(#2c2c2c), to(#353535));
