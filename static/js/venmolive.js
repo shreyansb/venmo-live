@@ -113,7 +113,7 @@ function create_marker(newLoc, locType, eventHTML) {
     } else if (locType == 'comment') {
         markerOptions.icon = commentIcon;
     }
-    var infoWindow = new google.maps.InfoWindow({content: eventHTML});
+    var infoWindow = new google.maps.InfoWindow({content: eventHTML, maxWidth: 300});
     var marker = new google.maps.Marker(markerOptions);
     marker.open = 0;
     marker.focused = 0;
