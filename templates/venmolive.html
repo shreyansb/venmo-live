@@ -4,15 +4,22 @@
     <title>Venmo Live</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <link href='{{static_url("css/style_new.css")}}' rel='stylesheet' type='text/css' />
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-    <script type="text/javascript" src="{{static_url('js/jquery-1.6.4.js')}}"></script>
-    <script type="text/javascript" src="{{static_url('js/venmolive.js')}}"></script>
+    <script type="text/javascript">
+        var websocket_url = '{{websocket_url}}';
+    </script>
+    <script type="text/javascript" 
+        src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" 
+        src="{{static_url('js/jquery-1.6.4.js')}}"></script>
+    <script type="text/javascript" 
+        src="{{static_url('js/venmolive.js')}}"></script>
 </head>
 <body onload="do_it_live();">
     <div id="background"></div>
     <div id="content">
         <div id="events">
-            <img class="logo" src="{{static_url('assets/venmo-logo-medium-6.png')}}" />
+            <img class="logo" 
+            src="{{static_url('assets/venmo-logo-medium-6.png')}}" />
             <ul>
 
             </ul>

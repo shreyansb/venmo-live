@@ -195,7 +195,7 @@ function render_template(data, return_html_for_info_window) {
 
 function start_web_socket() {
     if ("WebSocket" in window) {
-        var ws = new WebSocket("ws://live.venmo.com/realtime/");
+        var ws = new WebSocket(websocket_url);
         ws.onopen = function() {};
         ws.onmessage = function(evt) {
             var received_msg = JSON.parse(evt.data);

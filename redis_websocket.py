@@ -9,7 +9,6 @@ Have fun.
 """
 
 import os
-import logging
 import re
 import redis
 import threading
@@ -67,7 +66,8 @@ class BaseHandler(tornado.web.RequestHandler):
 class MainHandler(BaseHandler, AuthMixin):
     def get(self):
         if self.authenticate_user():
-            self.render("templates/venmolive.html")
+            self.render("templates/venmolive.html",
+                        websocket_url=venmo_live_settings.WEBSOCKET_URL)
 
 
 class RealtimeHandler(tornado.websocket.WebSocketHandler, AuthMixin):

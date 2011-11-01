@@ -16,7 +16,7 @@ For questions / feedback / coffee -> @kizlum or thomas@pelletier.im.
 Have fun.
 """
 import os
-
+import venmo_live_settings
 import tornado.autoreload
 import tornado.httpserver
 import tornado.websocket
@@ -29,7 +29,8 @@ import tornado.web
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/venmolive.html");
+        self.render("templates/venmolive.html", 
+                    websocket_url=venmo_live_settings.WEBSOCKET_URL);
 
 if __name__ == "__main__":
     settings = {
