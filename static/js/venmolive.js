@@ -3,9 +3,13 @@ var visibleMarkers = [];
 var maxMarkers = 5;
 var openInfoWindow;
 var signupIcon = 'static/assets/mario-jumping-icon.png';
+var signupIconOld = 'static/assets/mario-jumping-icon-low-opacity.png';
 var payIcon = 'static/assets/money-bag-icon.png';
+var payIconOld = 'static/assets/money-bag-icon-low-opacity.png';
 var chargeIcon = 'static/assets/money-bag-icon.png';
+var chargeIconOld = 'static/assets/money-bag-icon-low-opacity.png';
 var commentIcon = 'static/assets/money-bag-icon.png';
+var commentIconOld = 'static/assets/money-bag-icon-low-opacity.png';
 
 
 function set_page_and_map_dimensions() {
@@ -104,19 +108,25 @@ function create_marker(newLoc, locType, eventHTML) {
         map: map,
         animation: google.maps.Animation.DROP
     };
+    var oldMarker;
     if (locType == 'pay') {
         markerOptions.icon = payIcon;
+        oldMarker = payIconOld;
     } else if (locType == 'charge') {
         markerOptions.icon = chargeIcon;
+        oldMarker = chargeIconOld;
     } else if (locType == 'signup_detailed') {
         markerOptions.icon = signupIcon;
+        oldMarker = signupIconOld;
     } else if (locType == 'comment') {
         markerOptions.icon = commentIcon;
+        oldMarker = commentIconOld;
     }
     var infoWindow = new google.maps.InfoWindow({content: eventHTML, maxWidth: 300});
     var marker = new google.maps.Marker(markerOptions);
     marker.open = 0;
     marker.focused = 0;
+    marker.oldMarker = oldMarker;
     add_marker_listeners(marker, newLoc, infoWindow);
 
     setTimeout(function() {
@@ -133,7 +143,8 @@ function update_map(newLoc, locType, eventHTML) {
     var marker = create_marker(newLoc, locType, eventHTML);
     if (visibleMarkers.length >= maxMarkers) {
         var removedMarker = visibleMarkers.shift();
-        removedMarker.setMap(null);
+        //removedMarker.setMap(null);
+        removedMarker.setIcon(removedMarker.oldMarker);
     }
     visibleMarkers.push(marker);
     if (visibleMarkers.length > 1) {
