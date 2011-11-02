@@ -113,7 +113,7 @@ function create_marker(newLoc, locType, eventHTML) {
     } else if (locType == 'comment') {
         markerOptions.icon = commentIcon;
     }
-    var infoWindow = new google.maps.InfoWindow({content: eventHTML});
+    var infoWindow = new google.maps.InfoWindow({content: eventHTML, maxWidth: 300});
     var marker = new google.maps.Marker(markerOptions);
     marker.open = 0;
     marker.focused = 0;
@@ -155,6 +155,8 @@ function render_template(data, return_html_for_info_window) {
             var from_profile_pic = data.from_user_img_url;
             var to_profile_pic = data.to_user_img_url;
             var note = data.note;
+
+            /* List Item */
             public_payment = '<li class="public_payment shadow">';
             public_payment += '<span class="date">'+data.cat+'</span>';
             public_payment += '<div class="pics clearfix">';
@@ -163,18 +165,32 @@ function render_template(data, return_html_for_info_window) {
             public_payment += '<span class="note shadow float_right">'+note+'</span>';
             public_payment += '</div>';
             public_payment += '</li>';
-            event_html = public_payment;
+
+            /* Map Info Window */
+            event_html = '<li class="public_payment shadow">';
+            event_html += '<div class="pics clearfix">';
+            event_html += '<img height="50px" class="profile_pic shadow float_left" src="'+from_profile_pic+'" />';
+            event_html += '<img height="50px" class="profile_pic shadow float_right" src="'+to_profile_pic+'" />';
+            event_html += '<span class="note shadow float_right">'+note+'</span>';
+            event_html += '</div>';
+            event_html += '</li>';
         }
         else {
             /* Private Payment */
+            /* List Item */
             public_payment = '<li class="private_payment">';
             public_payment += '<span class="date">Payment</span>';
             public_payment += '<span class="note">Private - $'+data.amount+'</span>';
             public_payment += '</li>';
-            event_html = public_payment;
+
+            /* Map Info Window */
+            event_html = '<li class="private_payment">';
+            event_html += '<span class="note">Private Payment - $'+data.amount+'</span>';
+            event_html += '</li>';
         }
     }
     else if (data.cat == "signup_detailed") {
+        /* List Item */
         public_payment = '<li class="sign_up shadow">';
         public_payment += '<span class="date">New User</span>';
         public_payment += '<div class="sign_up_pic clearfix">';
@@ -182,9 +198,16 @@ function render_template(data, return_html_for_info_window) {
         public_payment += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
         public_payment += '</div>';
         public_payment += '</li>';
-        event_html = public_payment;
+        
+        /* Map Info Window */
+        event_html = '<li class="sign_up shadow">';
+        event_html += '<div class="sign_up_pic clearfix">';
+        event_html += '<img height="50px" class="profile_pic shadow float_left" src="'+data.profile_picture+'" />';
+        event_html += '<span class="note shadow float_right">'+data.user+' just signed up!</span>';
+        event_html += '</div>';
+        event_html += '</li>';
     }
-    $("#events ul").prepend($(event_html));
+    $("#events ul").prepend($(public_payment));
     if (return_html_for_info_window) {
         var html_for_info_window = "<div class='infowindow'><ul>";
         html_for_info_window += event_html;
